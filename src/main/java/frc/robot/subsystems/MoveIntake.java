@@ -23,9 +23,8 @@ public class MoveIntake extends SubsystemBase{
         moveIntake.getClosedLoopController().setSetpoint(0.25,ControlType.kPosition);
     }
     public void rollToRest() {
-        moveIntake.getClosedLoopController().setSetpoint(0.0,ControlType.kPosition);
+        moveIntake.getClosedLoopController().setSetpoint(0,ControlType.kPosition);
     }
-
     @Override
     public void periodic() {
         SmartDashboard.putNumber("IntakeMoverPosition",moveIntake.getEncoder().getPosition());

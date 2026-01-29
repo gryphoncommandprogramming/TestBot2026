@@ -8,23 +8,27 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeRoller extends SubsystemBase{
-    SparkFlex intakeroller = new SparkFlex(9,MotorType.kBrushless);
+public class FlyWheel extends SubsystemBase{
+    public SparkFlex flywheelroller = new SparkFlex(9,MotorType.kBrushless);
     public void spin() {
-        intakeroller.set(0.2);
+        flywheelroller.set(0.2);
     }    
     public void spinBack() {
-        intakeroller.set(-0.2);
+        flywheelroller.set(-0.2);
     }   
     public void spinStop() {
-        intakeroller.set(0);
+        flywheelroller.set(0);
     }
     public void setVelocity(double velocity) {
-        intakeroller.getClosedLoopController().setSetpoint(velocity,ControlType.kVelocity);
+        flywheelroller.getClosedLoopController().setSetpoint(velocity,ControlType.kVelocity);
+
     }
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("IntakeRollerVelocityThingy",intakeroller.getEncoder().getVelocity());
-    }  }
+        SmartDashboard.putNumber("FlyWheelRollerVelocityThingy",flywheelroller.getEncoder().getVelocity());
+    }
+
+    
+}
 
 

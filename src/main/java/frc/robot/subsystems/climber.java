@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import frc.robot.Configs.ClimberConfig;
+
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -7,7 +10,10 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class climber extends SubsystemBase{
+public class Climber extends SubsystemBase{
+    public Climber() {
+        climber.getConfigurator().apply(ClimberConfig.climberConfig);
+    }
     TalonFX climber = new TalonFX(11);
     public void up() {
         climber.set(0.2);
@@ -26,3 +32,5 @@ public class climber extends SubsystemBase{
         SmartDashboard.putNumber("climberPosition",climber.getPosition().getValueAsDouble());
     }    
 }
+
+

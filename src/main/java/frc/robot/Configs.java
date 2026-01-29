@@ -102,5 +102,11 @@ public final class Configs {
 
     public static final class ClimberConfig {
         public static final TalonFXConfiguration climberConfig = new TalonFXConfiguration();
+
+        static {
+            climberConfig.Slot0.kP = 1;
+            climberConfig.Slot1.kI = 0;
+            climberConfig.Slot2.kD = 0;
+        }
     }
 }

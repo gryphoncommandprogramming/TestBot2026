@@ -8,10 +8,11 @@ import frc.GryphonLib.PositionCalculations;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.PositionPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.MoveIntake;
-import frc.robot.subsystems.climber;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.MoveIntake;
 
 import static edu.wpi.first.units.Units.Seconds;
@@ -22,6 +23,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -35,8 +37,10 @@ public class RobotContainer {
   private final DriveSubsystem m_drive = new DriveSubsystem();
   private final IntakeRoller intakeRoller = new IntakeRoller();
   private final MoveIntake deployIntake = new MoveIntake();
-  private final climber climber = new climber();
+  private final Climber climber = new Climber();
   private final Hood hood = new Hood();
+  private final FlyWheel flywheelroller = new FlyWheel();
+
   // Controllers
   private final CommandXboxController m_driverController =
       new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -67,6 +71,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    SmartDashboard.putNumber("RPM",flywheelroller.flywheelroller.getEncoder().getVelocity());
     // Driver bindings
     m_driverController.start().onTrue(new InstantCommand(()->m_drive.zeroHeading(), m_drive));
     m_driverController.leftBumper().whileTrue(Commands.defer(()->PositionPIDCommand.generateCommand(m_drive, PositionCalculations.translateCoordinates(m_drive::getCurrentPose, 0, 2), Seconds.of(2)), Set.of(m_drive)));
@@ -89,6 +94,8 @@ public class RobotContainer {
     m_driverController.povRight().onFalse(new InstantCommand(()->hood.spinStop(),hood));
     m_driverController.povLeft().whileTrue(new InstantCommand(()->hood.spinBack(),hood));
     m_driverController.povLeft().onFalse(new InstantCommand(()->hood.spinStop(),hood));
+
+    m_operatorController.leftBumper().whileTrue(new InstantCommand(()->flywheelroller.setVelocity(SmartDashboard.getNumber("RPM", 0))));
 
     SmartDashboard.putData("Drive 2m Back", Commands.defer(()->m_drive.goToPose(PositionCalculations.translateCoordinates(m_drive::getCurrentPose, 0, -2)), Set.of(m_drive)));
     SmartDashboard.putData("Drive 2m Forward", new InstantCommand(()->m_drive.goToPose(PositionCalculations.translateCoordinates(m_drive::getCurrentPose, 0, 2)).schedule()));
